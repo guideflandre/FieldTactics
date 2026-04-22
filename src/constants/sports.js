@@ -5,7 +5,7 @@ export const SPORTS = {
     icon: '🎾',
     courtType: 'tennis',
     maxPerTeam: 2,
-    aspectRatio: 0.46,
+    aspectRatio: 0.55,
     theme: null,
   },
   padel: {
