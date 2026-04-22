@@ -3,7 +3,7 @@ import { STROKE_FADE_DURATION, STROKE_VISIBLE_DURATION } from '../constants/them
 
 let strokeId = 1;
 
-export function useDrawing(drawColour) {
+export function useDrawing(drawColour, isLockedRef) {
   const [strokes, setStrokes] = useState([]);
   const activeStrokeRef = useRef(null);
   const timersRef = useRef({});
@@ -26,6 +26,8 @@ export function useDrawing(drawColour) {
     const id = activeStrokeRef.current;
     activeStrokeRef.current = null;
     if (id == null) return;
+
+    if (isLockedRef?.current) return;
 
     const visibleTimer = setTimeout(() => {
       const fadeStart = Date.now();

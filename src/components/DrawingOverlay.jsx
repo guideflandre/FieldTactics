@@ -19,7 +19,7 @@ export function DrawingOverlay({ strokes, width, height }) {
     <svg
       width={width}
       height={height}
-      style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none', zIndex: 5 }}
+      style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none', zIndex: 5, overflow: 'visible' }}
     >
       {strokes.map((stroke) => {
         const d = pointsToPath(stroke.points);

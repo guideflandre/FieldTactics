@@ -16,8 +16,8 @@ export function VolleyballCourt({ width, height, theme }) {
 
   const lw = Math.max(1.5, w * 0.004);
 
-  const attackLineTop = midY - cH * 0.333;
-  const attackLineBottom = midY + cH * 0.333;
+  const attackLineTop = midY - cH / 6;
+  const attackLineBottom = midY + cH / 6;
 
   return (
     <svg width={w} height={h}>

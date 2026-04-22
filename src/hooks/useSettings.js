@@ -3,7 +3,7 @@ import { COURT_THEMES } from '../constants/theme.js';
 import { SPORTS, DEFAULT_SPORT } from '../constants/sports.js';
 
 const STORAGE_KEY = 'tennis_tactics_theme';
-const DEFAULT_THEME = 'australian_open';
+const DEFAULT_THEME = 'roland_garros';
 
 export function useSettings() {
   const [themeId, setThemeId] = useState(() => {

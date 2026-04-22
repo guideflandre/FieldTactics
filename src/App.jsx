@@ -13,9 +13,8 @@ export default function App() {
   const { theme, themeId, setTheme, sportId, setSportId } = useSettings();
   const maxPerTeam = SPORTS[sportId]?.maxPerTeam ?? 2;
   const { players, addPlayer, removePlayer, movePlayer, clearPlayers } = usePlayers(maxPerTeam);
-  const { strokes, startStroke, continueStroke, endStroke, clearStrokes } = useDrawing(theme.drawColour);
-
   const [isDrawMode, setIsDrawMode] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [courtSize, setCourtSize] = useState({ width: 0, height: 0 });
   const [scale, setScale] = useState(1);
@@ -29,6 +28,10 @@ export default function App() {
   const draggingPlayerRef = useRef(false);
   const isDrawModeRef = useRef(false);
   isDrawModeRef.current = isDrawMode;
+  const isLockedRef = useRef(false);
+  isLockedRef.current = isLocked;
+
+  const { strokes, startStroke, continueStroke, endStroke, clearStrokes } = useDrawing(theme.drawColour, isLockedRef);
 
   // Measure court container
   useEffect(() => {
@@ -135,7 +138,7 @@ export default function App() {
   const handleReset = useCallback(() => {
     clearPlayers();
     clearStrokes();
-    if (sportId === 'tennis') setTheme('australian_open');
+    if (sportId === 'tennis') setTheme('roland_garros');
   }, [clearPlayers, clearStrokes, setTheme, sportId]);
 
   const handleSelectSport = useCallback((id) => {
@@ -159,6 +162,14 @@ export default function App() {
           >
             {isDrawMode ? '✏️ Draw' : '👆 Move'}
           </button>
+          {isDrawMode && (
+            <button
+              style={{ ...s.toolbarBtn, ...(isLocked ? s.toolbarBtnLocked : {}) }}
+              onClick={() => setIsLocked(v => !v)}
+            >
+              {isLocked ? '🔒' : '🔓'}
+            </button>
+          )}
           <button style={s.toolbarBtn} onClick={() => setShowSettings(true)}>⚙️</button>
         </div>
       </div>
@@ -191,7 +202,9 @@ export default function App() {
           </div>
         )}
         {isDrawMode && (
-          <div style={s.drawHint}>Draw mode — drag to sketch</div>
+          <div style={s.drawHint}>
+            {isLocked ? 'Locked — lines are permanent' : 'Draw mode — drag to sketch'}
+          </div>
         )}
       </div>
 
@@ -258,6 +271,10 @@ const s = {
   toolbarBtnActive: {
     backgroundColor: 'rgba(255,220,0,0.25)',
     border: '1px solid rgba(255,220,0,0.5)',
+  },
+  toolbarBtnLocked: {
+    backgroundColor: 'rgba(255,100,100,0.25)',
+    border: '1px solid rgba(255,100,100,0.5)',
   },
   courtContainer: {
     flex: 1,
