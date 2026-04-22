@@ -5,6 +5,7 @@ export const SPORTS = {
     icon: '🎾',
     courtType: 'tennis',
     maxPerTeam: 2,
+    aspectRatio: 0.46,
     theme: null,
   },
   padel: {
@@ -13,6 +14,7 @@ export const SPORTS = {
     icon: '🏓',
     courtType: 'padel',
     maxPerTeam: 2,
+    aspectRatio: 0.50,
     theme: {
       court: '#2E8B6E',
       courtLight: '#3AAD88',
@@ -29,6 +31,7 @@ export const SPORTS = {
     icon: '⚽',
     courtType: 'football',
     maxPerTeam: 11,
+    aspectRatio: 0.65,
     theme: {
       court: '#2E7D32',
       courtLight: '#388E3C',
@@ -45,6 +48,7 @@ export const SPORTS = {
     icon: '🏑',
     courtType: 'field_hockey',
     maxPerTeam: 11,
+    aspectRatio: 0.60,
     theme: {
       court: '#1565C0',
       courtLight: '#1976D2',
@@ -61,6 +65,7 @@ export const SPORTS = {
     icon: '🏒',
     courtType: 'ice_hockey',
     maxPerTeam: 6,
+    aspectRatio: 0.43,
     theme: {
       court: '#E3F2FD',
       courtLight: '#FFFFFF',
@@ -77,6 +82,7 @@ export const SPORTS = {
     icon: '🏀',
     courtType: 'basketball',
     maxPerTeam: 5,
+    aspectRatio: 0.54,
     theme: {
       court: '#C8843A',
       courtLight: '#D4944A',
@@ -93,6 +99,7 @@ export const SPORTS = {
     icon: '🏐',
     courtType: 'volleyball',
     maxPerTeam: 6,
+    aspectRatio: 0.50,
     theme: {
       court: '#5C9BD6',
       courtLight: '#76B3E8',
@@ -109,6 +116,7 @@ export const SPORTS = {
     icon: '⚾',
     courtType: 'baseball',
     maxPerTeam: 9,
+    aspectRatio: 0.90,
     theme: {
       court: '#2E7D32',
       courtLight: '#C2915A',

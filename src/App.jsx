@@ -20,6 +20,7 @@ export default function App() {
   const [scale, setScale] = useState(1);
 
   const courtContainerRef = useRef(null);
+  const innerCourtRef = useRef(null);
   const scaleRef = useRef(1);
   const isDrawingRef = useRef(false);
   const isPinchingRef = useRef(false);
@@ -32,6 +33,23 @@ export default function App() {
   isLockedRef.current = isLocked;
 
   const { strokes, startStroke, continueStroke, endStroke, clearStrokes } = useDrawing(theme.drawColour, isLockedRef);
+
+  // Constrain court to correct aspect ratio, centred in container
+  const aspectRatio = SPORTS[sportId]?.aspectRatio ?? 0.5;
+  let cW = courtSize.width;
+  let cH = courtSize.height;
+  let offX = 0;
+  let offY = 0;
+  if (cW > 0 && cH > 0) {
+    if (cW / cH > aspectRatio) {
+      cW = cH * aspectRatio;
+      offX = (courtSize.width - cW) / 2;
+    } else {
+      cH = cW / aspectRatio;
+      offY = (courtSize.height - cH) / 2;
+    }
+  }
+  const constrainedCourtSize = { width: cW, height: cH };
 
   // Measure court container
   useEffect(() => {
@@ -61,15 +79,11 @@ export default function App() {
   }, []);
 
   const getCourtCoords = useCallback((clientX, clientY) => {
-    const rect = courtContainerRef.current.getBoundingClientRect();
-    const lx = clientX - rect.left;
-    const ly = clientY - rect.top;
+    const rect = innerCourtRef.current.getBoundingClientRect();
     const s = scaleRef.current;
-    const w = rect.width;
-    const h = rect.height;
     return {
-      x: (lx - w / 2) / s + w / 2,
-      y: (ly - h / 2) / s + h / 2,
+      x: (clientX - rect.left) / s,
+      y: (clientY - rect.top) / s,
     };
   }, []);
 
@@ -185,20 +199,25 @@ export default function App() {
       >
         {courtSize.width > 0 && (
           <div style={{ width: '100%', height: '100%', transform: `scale(${scale})`, transformOrigin: 'center center' }}>
-            <SportCourt sportId={sportId} theme={theme} width={courtSize.width} height={courtSize.height} />
-            <DrawingOverlay strokes={strokes} width={courtSize.width} height={courtSize.height} />
-            {players.map(player => (
-              <PlayerToken
-                key={player.id}
-                player={player}
-                courtSize={courtSize}
-                scaleRef={scaleRef}
-                onMove={movePlayer}
-                onRemove={removePlayer}
-                isDrawMode={isDrawMode}
-                draggingPlayerRef={draggingPlayerRef}
-              />
-            ))}
+            <div
+              ref={innerCourtRef}
+              style={{ position: 'absolute', left: offX, top: offY, width: cW, height: cH }}
+            >
+              <SportCourt sportId={sportId} theme={theme} width={cW} height={cH} />
+              <DrawingOverlay strokes={strokes} width={cW} height={cH} />
+              {players.map(player => (
+                <PlayerToken
+                  key={player.id}
+                  player={player}
+                  courtSize={constrainedCourtSize}
+                  scaleRef={scaleRef}
+                  onMove={movePlayer}
+                  onRemove={removePlayer}
+                  isDrawMode={isDrawMode}
+                  draggingPlayerRef={draggingPlayerRef}
+                />
+              ))}
+            </div>
           </div>
         )}
         {isDrawMode && (
